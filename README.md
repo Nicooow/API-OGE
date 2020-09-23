@@ -1,6 +1,7 @@
 # API OGE
 
 API Python permettant de récupérer automatiquement les informations sur OGE.
+
 Lien d'OGE : https://iutdijon.u-bourgogne.fr/oge
 
 Cette API permet de :
@@ -16,39 +17,47 @@ Cette API permet de :
 
 Ajouter le dossier **oge** à votre projet puis importez le :
 
-    from oge.api import API
+```python
+from oge.api import API
+```
 
 # Exemple
 
-*example*.*py*
+`example.py`
 
-    # -*- coding: utf-8 -*-
+```python
+# -*- coding: utf-8 -*-
 
-    from oge.api import API
-    from getpass import getpass
+from oge.api import API
+from getpass import getpass
 
-    api = API("nb232977", getpass(), debug=True)
-    api.connexion()
+api = API("nb232977", getpass(), debug=False)
+api.connexion()
 
-    for m in api.getMatieres(2):
-        print(f"{m.nom} : {m.nbNote} note" + "s" if m.nbNote>0 else "")
+for m in api.getMatieres(1):
+    print(f"{m.nom} : {m.nbNote} note" + "s" if m.nbNote>0 else "")
 
-        for c in api.getCategories(m):
-            print(f"    {c.nom}")
+    for c in api.getCategories(m):
+        print(f"    {c.nom}")
 
-            for n in api.getNotes(c):
-                print(f"        - {n.date} - {n.intitule} - {n.note}/{n.total} - coef {n.coef}")
+        for n in api.getNotes(c):
+            print(f"        - {n.date} - {n.intitule} - {n.note}/{n.total} - coef {n.coef}")
+```
 
 # Documentation
 ## Création et connexion
 
-    oge = API(utilisateur="", mdp="", debug=False):
+```python
+oge = API(utilisateur="", mdp="", debug=False):
+```
 
 `utilisateur` : nom d'utilisateur de l'UB (xx0000) (optionnel)
 `mdp` : mot de passe du compte (optionnel)
 `debug` : active/désactive les logs dans la console (optionnel, par défaut False)
 
-    oge.connexion(self, utilisateur="", mdp=""):
+```python
+oge.connexion(utilisateur="", mdp=""):
+```
 
 `utilisateur` : nom d'utilisateur de l'UB (xx0000) (optionnel)
 `mdp` : mot de passe du compte (optionnel)
@@ -57,8 +66,29 @@ Ajouter le dossier **oge** à votre projet puis importez le :
 
 ## Obtention d'informations
 **Matieres**
+```python
+api.getMatieres(semestre)
+```
+- `semestre` : (int) numéro du semestre voulu
+
+retour : liste de `Matiere`
+
 **Catégories**
+```python
+api.getCategories(matiere)
+```
+- `matiere` : (Matiere) matière pour laquelle obtenir les catégories
+
+retour : liste de `Categorie`
+
 **Notes**
+```python
+api.getNotes(categorie)
+```
+- `matiere` : (Categorie) catégorie pour laquelle obtenir les notes
+
+retour : liste de `Note`
+
 ## Modèles
 **Matiere**
 ```python
@@ -83,3 +113,7 @@ note = api.getNotes(categorie)[0]
  - `note.note` : Note de la note *(x/)*
  - `note.total` : Note total possible *(/x)*
  - `note.coef` : Coefficient de la note
+
+# Screenshot
+`example.py`
+![example.py](https://i.imgur.com/7bWxBWE.png)
